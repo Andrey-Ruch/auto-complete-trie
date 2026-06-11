@@ -1,31 +1,63 @@
-import { AutoCompleteTrie } from "../models/AutoCompleteTrie.js";
+export class AutoCompleteController {
+    constructor(trie) {
+        this.trie = trie;
+    }
 
-const trie = new AutoCompleteTrie();
+    addWord(word) {
+        const normalized = this._normalize(word);
+        if (!normalized) {
+            return { success: false, message: "Please provide a valid word" };
+        }
 
-trie.addWord("run");
-trie.addWord("running");
-trie.addWord("there");
-trie.addWord("this");
-trie.addWord("cat");
-trie.addWord("car");
-trie.addWord("card");
+        this.trie.addWord(normalized);
 
-console.log(JSON.stringify(trie, null, 2));
+        return {
+            success: true,
+            message: `Added '${normalized}' to dictionary`,
+        };
+    }
 
-console.log(trie.findWord("running")); // true
-console.log(trie.findWord("run")); // true
-console.log(trie.findWord("dog")); // false - path breaks at 'd'
+    findWord(word) {
+        const normalized = this._normalize(word);
+        if (!normalized) {
+            return { success: false, message: "Please provide a valid word" };
+        }
 
-const node = trie._getRemainingTree("th");
-console.log(node.value); // 'h'
-console.log(Object.keys(node.children)); // ['e', 'i']
-console.log(trie._getRemainingTree("xyz")); // null
+        const exists = this.trie.findWord(normalized);
 
-const words = [];
-trie._allWordsHelper("", trie, words);
-console.log(words); // ['run', 'running', 'there', 'this', 'cat', 'car', 'card']
+        return {
+            success: exists,
+            message: exists
+                ? `'${normalized}' exists in dictionary`
+                : `'${normalized}' not found in dictionary`,
+        };
+    }
 
-console.log(trie.predictWords("ca")); // ['cat', 'car', 'card']
-console.log(trie.predictWords("car")); // ['car', 'card']
-console.log(trie.predictWords("dog")); // []
-console.log(trie.predictWords("")); // ['run', 'running', 'there', 'this', 'cat', 'car', 'card'] - every word
+    predictWords(prefix) {
+        const normalized = this._normalize(prefix);
+        if (!normalized) {
+            return {
+                success: false,
+                message: "Please provide a valid prefix",
+                suggestions: [],
+            };
+        }
+
+        const suggestions = this.trie.predictWords(normalized);
+
+        return {
+            success: true,
+            prefix: normalized,
+            suggestions,
+            message: suggestions.length
+                ? `Suggestions for '${normalized}': ${suggestions.join(", ")}`
+                : `No suggestions found for '${normalized}'`,
+        };
+    }
+
+    // One place for input cleanup - trim whitespace, lowercase
+    _normalize(input) {
+        if (typeof input !== "string") return "";
+        return input.trim().toLowerCase();
+    }
+}
