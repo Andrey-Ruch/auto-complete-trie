@@ -22,7 +22,20 @@ export class AutoCompleteTrie {
         currentNode.endOfWord = true;
     }
 
-    findWord(word) {}
+    findWord(word) {
+        let currentNode = this;
+
+        for (const char of word) {
+            // If the path breaks at any point, the word can't exist
+            if (!currentNode.children[char]) {
+                return false;
+            }
+            currentNode = currentNode.children[char];
+        }
+
+        // The path exists - but it's only a word if the flag says so
+        return currentNode.endOfWord;
+    }
 
     predictWords(prefix) {}
 
