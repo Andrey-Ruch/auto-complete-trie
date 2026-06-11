@@ -54,5 +54,15 @@ export class AutoCompleteTrie {
         return currentNode;
     }
 
-    _allWordsHelper(prefix, node, allWords) {}
+    _allWordsHelper(prefix, node, allWords) {
+        // If this node completes a word, the accumulated prefix IS that word
+        if (node.endOfWord) {
+            allWords.push(prefix);
+        }
+
+        // Recurse into every child, extending the prefix with its character
+        for (const char in node.children) {
+            this._allWordsHelper(prefix + char, node.children[char], allWords);
+        }
+    }
 }

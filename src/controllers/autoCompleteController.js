@@ -6,6 +6,9 @@ trie.addWord("run");
 trie.addWord("running");
 trie.addWord("there");
 trie.addWord("this");
+trie.addWord("cat");
+trie.addWord("car");
+trie.addWord("card");
 
 console.log(JSON.stringify(trie, null, 2));
 
@@ -17,3 +20,7 @@ const node = trie._getRemainingTree("th");
 console.log(node.value); // 'h'
 console.log(Object.keys(node.children)); // ['e', 'i']
 console.log(trie._getRemainingTree("xyz")); // null
+
+const words = [];
+trie._allWordsHelper("", trie, words);
+console.log(words); // ['run', 'running', 'there', 'this', 'cat', 'car', 'card']
