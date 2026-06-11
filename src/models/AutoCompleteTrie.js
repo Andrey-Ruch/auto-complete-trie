@@ -39,7 +39,20 @@ export class AutoCompleteTrie {
 
     predictWords(prefix) {}
 
-    _getRemainingTree(prefix, node) {}
+    _getRemainingTree(prefix, node = this) {
+        let currentNode = node;
+
+        for (const char of prefix) {
+            // Prefix isn't in the trie at all
+            if (!currentNode.children[char]) {
+                return null;
+            }
+            currentNode = currentNode.children[char];
+        }
+
+        // The node where the prefix ends
+        return currentNode;
+    }
 
     _allWordsHelper(prefix, node, allWords) {}
 }
