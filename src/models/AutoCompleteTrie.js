@@ -37,7 +37,22 @@ export class AutoCompleteTrie {
         return currentNode.endOfWord;
     }
 
-    predictWords(prefix) {}
+    predictWords(prefix) {
+        const allWords = [];
+
+        // Step 1: navigate to where the prefix ends
+        const remainingTree = this._getRemainingTree(prefix);
+
+        // No such prefix in the trie → no suggestions
+        if (!remainingTree) {
+            return allWords;
+        }
+
+        // Step 2: collect every word hanging below that node
+        this._allWordsHelper(prefix, remainingTree, allWords);
+
+        return allWords;
+    }
 
     _getRemainingTree(prefix, node = this) {
         let currentNode = node;

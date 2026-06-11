@@ -24,3 +24,8 @@ console.log(trie._getRemainingTree("xyz")); // null
 const words = [];
 trie._allWordsHelper("", trie, words);
 console.log(words); // ['run', 'running', 'there', 'this', 'cat', 'car', 'card']
+
+console.log(trie.predictWords("ca")); // ['cat', 'car', 'card']
+console.log(trie.predictWords("car")); // ['car', 'card']
+console.log(trie.predictWords("dog")); // []
+console.log(trie.predictWords("")); // ['run', 'running', 'there', 'this', 'cat', 'car', 'card'] - every word
