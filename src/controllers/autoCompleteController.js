@@ -4,60 +4,68 @@ export class AutoCompleteController {
     }
 
     addWord(word) {
-        const normalized = this._normalize(word);
-        if (!normalized || normalized.includes(" ")) {
-            return { success: false, message: "Please provide a valid word" };
+        const result = this._validate(word);
+        if (!result.valid) {
+            return { success: false, message: result.error };
         }
 
-        this.trie.addWord(normalized);
+        this.trie.addWord(result.word);
 
         return {
             success: true,
-            message: `Added '${normalized}' to dictionary`,
+            message: `Added '${result.word}' to dictionary`,
         };
     }
 
     findWord(word) {
-        const normalized = this._normalize(word);
-        if (!normalized) {
-            return { success: false, message: "Please provide a valid word" };
+        const result = this._validate(word);
+        if (!result.valid) {
+            return { success: false, message: result.error };
         }
 
-        const exists = this.trie.findWord(normalized);
+        const exists = this.trie.findWord(result.word);
 
         return {
             success: exists,
             message: exists
-                ? `'${normalized}' exists in dictionary`
-                : `'${normalized}' not found in dictionary`,
+                ? `'${result.word}' exists in dictionary`
+                : `'${result.word}' not found in dictionary`,
         };
     }
 
     predictWords(prefix) {
-        const normalized = this._normalize(prefix);
-        if (!normalized) {
-            return {
-                success: false,
-                message: "Please provide a valid prefix",
-                suggestions: [],
-            };
+        const result = this._validate(prefix);
+        if (!result.valid) {
+            return { success: false, message: result.error, suggestions: [] };
         }
 
-        const suggestions = this.trie.predictWords(normalized);
+        const suggestions = this.trie.predictWords(result.word);
 
         return {
             success: true,
-            prefix: normalized,
+            prefix: result.word,
             suggestions,
             message: suggestions.length
-                ? `Suggestions for '${normalized}': ${suggestions.join(", ")}`
-                : `No suggestions found for '${normalized}'`,
+                ? `Suggestions for '${result.word}': ${suggestions.join(", ")}`
+                : `No suggestions found for '${result.word}'`,
         };
     }
 
-    // One place for input cleanup - trim whitespace, lowercase
-    _normalize(input) {
-        if (typeof input !== "string") return "";
-        return input.trim().toLowerCase();
+    // Single gate for all input: trim, lowercase, then enforce the rules
+    _validate(input) {
+        if (typeof input !== "string" || !input.trim()) {
+            return { valid: false, error: "Please provide a valid word" };
+        }
+
+        const word = input.trim().toLowerCase();
+
+        if (/\s/.test(word)) {
+            return {
+                valid: false,
+                error: "Only single words are allowed (no spaces)",
+            };
+        }
+
+        return { valid: true, word };
     }
 }
