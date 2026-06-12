@@ -5,7 +5,7 @@ export class AutoCompleteController {
 
     addWord(word) {
         const normalized = this._normalize(word);
-        if (!normalized) {
+        if (!normalized || normalized.includes(" ")) {
             return { success: false, message: "Please provide a valid word" };
         }
 
