@@ -13,26 +13,39 @@ describe("AutoCompleteTrie.predictWords", () => {
         trie.addWord("running");
         trie.addWord("rust");
 
-        expect(trie.predictWords("ru").sort()).toEqual(["run", "running", "rust"]);
+        expect(trie.predictWords("ru").map((s) => s.word).sort()).toEqual([
+            "run",
+            "running",
+            "rust",
+        ]);
     });
 
     test("includes the prefix itself when it is a complete word", () => {
         trie.addWord("run");
         trie.addWord("running");
 
-        expect(trie.predictWords("run").sort()).toEqual(["run", "running"]);
+        expect(trie.predictWords("run").map((s) => s.word).sort()).toEqual([
+            "run",
+            "running",
+        ]);
     });
 
     test("excludes the prefix when the path exists but is not a word", () => {
         trie.addWord("running");
 
-        expect(trie.predictWords("run")).toEqual(["running"]);
+        expect(trie.predictWords("run").map((s) => s.word)).toEqual(["running"]);
     });
 
     test("returns a single match", () => {
         trie.addWord("cat");
 
-        expect(trie.predictWords("ca")).toEqual(["cat"]);
+        expect(trie.predictWords("ca").map((s) => s.word)).toEqual(["cat"]);
+    });
+
+    test("returns each match with its frequency, defaulting to 0", () => {
+        trie.addWord("run");
+
+        expect(trie.predictWords("run")[0]).toEqual({ word: "run", frequency: 0 });
     });
 
     test("returns an empty array for a prefix not in the trie", () => {
@@ -48,7 +61,11 @@ describe("AutoCompleteTrie.predictWords", () => {
         trie.addWord("ab");
         trie.addWord("cat");
 
-        expect(trie.predictWords("").sort()).toEqual(["a", "ab", "cat"]);
+        expect(trie.predictWords("").map((s) => s.word).sort()).toEqual([
+            "a",
+            "ab",
+            "cat",
+        ]);
     });
 
     test("returns an empty array for any prefix on an empty trie", () => {
@@ -59,12 +76,12 @@ describe("AutoCompleteTrie.predictWords", () => {
     test("includes the empty string when it was added as a word", () => {
         trie.addWord("");
 
-        expect(trie.predictWords("")).toEqual([""]);
+        expect(trie.predictWords("").map((s) => s.word)).toEqual([""]);
     });
 
     test("returns the exact word for a full-word prefix with no extensions", () => {
         trie.addWord("run");
 
-        expect(trie.predictWords("run")).toEqual(["run"]);
+        expect(trie.predictWords("run").map((s) => s.word)).toEqual(["run"]);
     });
 });

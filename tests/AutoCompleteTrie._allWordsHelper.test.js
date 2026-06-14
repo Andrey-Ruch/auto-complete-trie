@@ -14,7 +14,7 @@ describe("AutoCompleteTrie._allWordsHelper", () => {
         const allWords = [];
         trie._allWordsHelper("", trie, allWords);
 
-        expect(allWords).toEqual(["run"]);
+        expect(allWords.map((w) => w.word)).toEqual(["run"]);
     });
 
     test("collects every word in the trie from the root", () => {
@@ -25,7 +25,7 @@ describe("AutoCompleteTrie._allWordsHelper", () => {
         const allWords = [];
         trie._allWordsHelper("", trie, allWords);
 
-        expect(allWords.sort()).toEqual(["cat", "rug", "run"]);
+        expect(allWords.map((w) => w.word).sort()).toEqual(["cat", "rug", "run"]);
     });
 
     test("collects a word and its longer extension", () => {
@@ -35,7 +35,7 @@ describe("AutoCompleteTrie._allWordsHelper", () => {
         const allWords = [];
         trie._allWordsHelper("", trie, allWords);
 
-        expect(allWords.sort()).toEqual(["run", "running"]);
+        expect(allWords.map((w) => w.word).sort()).toEqual(["run", "running"]);
     });
 
     test("collects nothing from an empty trie", () => {
@@ -51,7 +51,7 @@ describe("AutoCompleteTrie._allWordsHelper", () => {
         const allWords = [];
         trie._allWordsHelper("", trie, allWords);
 
-        expect(allWords).toEqual([""]);
+        expect(allWords.map((w) => w.word)).toEqual([""]);
     });
 
     test("reconstructs full words from a subtree using the supplied prefix", () => {
@@ -63,7 +63,7 @@ describe("AutoCompleteTrie._allWordsHelper", () => {
         const allWords = [];
         trie._allWordsHelper("ca", node, allWords);
 
-        expect(allWords.sort()).toEqual(["can", "car", "cart"]);
+        expect(allWords.map((w) => w.word).sort()).toEqual(["can", "car", "cart"]);
     });
 
     test("mutates the supplied accumulator and returns nothing", () => {
@@ -73,7 +73,7 @@ describe("AutoCompleteTrie._allWordsHelper", () => {
         const result = trie._allWordsHelper("", trie, allWords);
 
         expect(result).toBeUndefined();
-        expect(allWords).toEqual(["run"]);
+        expect(allWords.map((w) => w.word)).toEqual(["run"]);
     });
 
     test("counts the starting node's own end-of-word flag", () => {
@@ -83,6 +83,6 @@ describe("AutoCompleteTrie._allWordsHelper", () => {
         const allWords = [];
         trie._allWordsHelper("run", node, allWords);
 
-        expect(allWords).toEqual(["run"]);
+        expect(allWords.map((w) => w.word)).toEqual(["run"]);
     });
 });
