@@ -62,8 +62,8 @@ export class AutoCompleteController {
         const node = this.trie.incrementUsage(result.word);
         if (node === null) {
             return {
-                success: false,
-                message: `'${normalized}' not found in dictionary`,
+              success: false,
+              message: `'${result.word}' not found in dictionary`,
             };
         }
 
