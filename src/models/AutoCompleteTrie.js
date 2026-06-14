@@ -3,6 +3,7 @@ export class AutoCompleteTrie {
         this.value = value;
         this.children = {};
         this.endOfWord = false;
+        this.frequency = 0;
     }
 
     addWord(word) {
@@ -37,6 +38,18 @@ export class AutoCompleteTrie {
         return currentNode.endOfWord;
     }
 
+    incrementUsage(word) {
+        const node = this._getRemainingTree(word);
+
+        // Not in the trie, or it's only a prefix - nothing to increment
+        if (!node || !node.endOfWord) {
+            return null;
+        }
+
+        node.frequency += 1;
+        return node; // return the node with new count
+    }
+
     predictWords(prefix) {
         const allWords = [];
 
@@ -51,6 +64,8 @@ export class AutoCompleteTrie {
         // Step 2: collect every word hanging below that node
         this._allWordsHelper(prefix, remainingTree, allWords);
 
+        // Highest frequency first; ties keep insertion order
+        allWords.sort((a, b) => b.frequency - a.frequency);
         return allWords;
     }
 
@@ -72,7 +87,7 @@ export class AutoCompleteTrie {
     _allWordsHelper(prefix, node, allWords) {
         // If this node completes a word, the accumulated prefix IS that word
         if (node.endOfWord) {
-            allWords.push(prefix);
+            allWords.push({ word: prefix, frequency: node.frequency });
         }
 
         // Recurse into every child, extending the prefix with its character

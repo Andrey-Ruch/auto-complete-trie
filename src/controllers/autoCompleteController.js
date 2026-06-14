@@ -39,15 +39,37 @@ export class AutoCompleteController {
             return { success: false, message: result.error, suggestions: [] };
         }
 
-        const suggestions = this.trie.predictWords(result.word);
+        const suggestions = this.trie.predictWords(result.word); // return [{ word, frequency }]
 
         return {
             success: true,
             prefix: result.word,
             suggestions,
             message: suggestions.length
-                ? `Suggestions for '${result.word}': ${suggestions.join(", ")}`
+                ? `Suggestions for '${result.word}': ${suggestions
+                      .map((s) => `${s.word} (${s.frequency})`)
+                      .join(", ")}`
                 : `No suggestions found for '${result.word}'`,
+        };
+    }
+
+    incrementUsage(word) {
+        const result = this._validate(word);
+        if (!result.valid) {
+            return { success: false, message: result.error };
+        }
+
+        const node = this.trie.incrementUsage(result.word);
+        if (node === null) {
+            return {
+                success: false,
+                message: `'${normalized}' not found in dictionary`,
+            };
+        }
+
+        return {
+            success: true,
+            message: `Incremented usage for '${result.word}' (now ${node.frequency})`,
         };
     }
 

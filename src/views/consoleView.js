@@ -44,6 +44,10 @@ export class ConsoleView {
                 this._render(this.controller.predictWords(argument));
                 break;
 
+            case "use":
+                this._render(this.controller.incrementUsage(argument));
+                break;
+
             case "help":
                 this._showHelp();
                 break;
@@ -72,6 +76,7 @@ export class ConsoleView {
         console.log(`Commands:
   add <word>        - Add word to dictionary
   find <word>       - Check if word exists
+  use <word>        - Increment usage count for a word
   complete <prefix> - Get completions
   help              - Show this message
   exit              - Quit program`);
