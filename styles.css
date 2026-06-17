@@ -1,0 +1,183 @@
+:root {
+    --indigo: #6c75e0;
+    --indigo-dark: #5a63d6;
+    --border: #dfe3ec;
+    --text: #2b2f38;
+    --muted: #6b7280;
+    --success-bg: #d6f5dd;
+    --success-border: #9fe0b0;
+    --success-text: #1f7a3d;
+    --error-bg: #fbe0e0;
+    --error-border: #f0a8a8;
+    --error-text: #8a2b2b;
+    --match-bg: #fbd5d5;
+    --radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 48px 16px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--text);
+    background: #ffffff;
+}
+
+.container {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+h1 {
+    margin: 0;
+    text-align: center;
+    font-size: 1.6rem;
+    color: var(--text);
+}
+
+/* --- Inputs shared look --- */
+input[type="text"] {
+    width: 100%;
+    padding: 18px 20px;
+    font-size: 1.1rem;
+    color: var(--text);
+    background: #ffffff;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+input[type="text"]:focus {
+    border-color: var(--indigo);
+}
+
+input[type="text"]::placeholder {
+    color: var(--muted);
+}
+
+/* --- Add row --- */
+.add-row {
+    display: flex;
+    gap: 16px;
+}
+
+.add-row input {
+    flex: 1;
+}
+
+#add-btn {
+    flex: 0 0 auto;
+    padding: 0 28px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: var(--indigo);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+#add-btn:hover {
+    background: var(--indigo-dark);
+}
+
+/* --- Feedback bar --- */
+#feedback {
+    padding: 16px 20px;
+    font-size: 1.1rem;
+    border: 2px solid transparent;
+    border-radius: var(--radius);
+}
+
+.feedback--success {
+    background: var(--success-bg);
+    border-color: var(--success-border);
+    color: var(--success-text);
+}
+
+.feedback--error {
+    background: var(--error-bg);
+    border-color: var(--error-border);
+    color: var(--error-text);
+}
+
+/* --- Search + suggestions --- */
+.search-area {
+    position: relative;
+}
+
+#suggestions {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 10;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: #ffffff;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.suggestion {
+    padding: 18px 20px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-top: 1px solid #f0f2f7;
+    transition: background 0.12s ease;
+}
+
+.suggestion:first-child {
+    border-top: none;
+}
+
+.suggestion:hover {
+    background: #f6f7fb;
+}
+
+.suggestion .match {
+    font-weight: 700;
+    background: var(--match-bg);
+    border-radius: 3px;
+}
+
+.suggestion--empty {
+    color: var(--muted);
+    cursor: default;
+}
+
+.suggestion--empty:hover {
+    background: none;
+}
+
+/* --- Stats card --- */
+.stats {
+    margin-top: 16px;
+    padding: 28px;
+    text-align: center;
+    background: #f7f8fb;
+    border-radius: var(--radius);
+}
+
+#word-count {
+    display: block;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--indigo);
+}
+
+.stats__label {
+    font-size: 1.2rem;
+    color: var(--text);
+}

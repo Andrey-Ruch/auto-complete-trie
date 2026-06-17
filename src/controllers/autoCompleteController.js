@@ -76,7 +76,7 @@ export class AutoCompleteController {
     // Single gate for all input: trim, lowercase, then enforce the rules
     _validate(input) {
         if (typeof input !== "string" || !input.trim()) {
-            return { valid: false, error: "Please provide a valid word" };
+            return { valid: false, error: "Cannot add empty word" };
         }
 
         const word = input.trim().toLowerCase();
