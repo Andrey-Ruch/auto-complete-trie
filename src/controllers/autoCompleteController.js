@@ -73,6 +73,10 @@ export class AutoCompleteController {
         };
     }
 
+    getWordCount() {
+        return this.trie.predictWords("").length;
+    }
+
     // Single gate for all input: trim, lowercase, then enforce the rules
     _validate(input) {
         if (typeof input !== "string" || !input.trim()) {
